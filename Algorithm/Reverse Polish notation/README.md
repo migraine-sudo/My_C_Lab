@@ -31,9 +31,103 @@
 
 ## 3.实现
 
+后缀表达式计算
+
+```c++
+
+//Read RPN and push the result
+int RPN_Calc(char str[],unsigned long len){
+    StackList L;
+    ElemType a,b,num=0,top;
+    initStack(L);
+
+    for(int i=0;i<len;i++)
+    {
+        if(IF_ITS_NUMBER(str[i])) //If a number is detected, operate directly
+            num=num*10+str[i]-48;
+            //Push(L,str[i]-48);//char->int
+        else if(str[i]=='.') //If a dot is detected, it means that a number has been entered
+        {
+            Push(L,num);
+            num=0;
+        }
+        else //If the operator is detected, operate it, and push the result onto the stack after the end
+        {
+            Pop(L,a);
+            Pop(L,b);
+            if(str[i]=='+')
+                Push(L,a+b);
+            if(str[i]=='-')
+                Push(L,b-a);
+            if(str[i]=='*')
+                Push(L,b*a);
+            if(str[i]=='/')
+                Push(L,b/a);
+        }
+    }
+    Pop(L,top);
+    printf("[*]%d\n",top);
+    return 0;
+}
+```
+
+生成后缀表达式
+
+```c++
+int infix2suffix(char infix[],char suffix[],int len){
+    int i=0,j=0;
+    StackList L;
+    initStack(L);
+
+    for(;i<len;i++)
+    {
+        if(IF_ITS_NUMBER(infix[i]))//if a number is detected,add it into suffix
+        {
+            suffix[j++]=infix[i];
+            suffix[j++]='.';
+        }
+        else if(infix[i]=='+'||infix[i]=='-'||infix[i]=='*'||infix[i]=='/')//if an operator is detected
+        {
+            char opt,top;
+            GetTop(L,opt);
+            //printf("opt:%c",opt);
+            if(infix[i]=='+'||infix[i]=='-'){ //if meet +/-
+                int Empty=StackEmpty(L); //Not Empty:0 Empty:1
+                //printf("Empty=%d",Empty);
+                if(opt=='+'||opt=='-'){ //Empty the Stack
+                   while(!Empty){
+                       char tmp;
+                        Pop(L,tmp);
+                        Empty=StackEmpty(L);
+                        //printf("Empty:%d",Empty);
+                        //printf("tmp:%d\n",tmp);
+                        suffix[j++]=tmp;
+                        //printf("suffix:%s\n",suffix);
+                    }
+                }
+                Push(L,infix[i]);
+            }
+        }
+        
+    }
+    char tmp;
+    Pop(L,tmp);
+    suffix[j++]=tmp;
+    return strlen(suffix);
+}
+```
 
 
 
+因为时间原因，以下功能并没有实现
+
+- 对乘法除法的支持
+- 栈实现有一些内存问题
+- 没有对括号的支持
+
+运行效果，不过因为栈实现等关系，可能导致bus error，以后有时间再修改。
+
+![braBK9](https://gitee.com/p0kerface/blog_image_management/raw/master/uPic/braBK9.png)
 
 
 
