@@ -23,7 +23,9 @@ int RPN_Calc(char str[],unsigned long len);
 //Stack(LinkList)
 bool initStack(StackList &L);
 bool Push(StackList &L,ElemType x);
+bool Push(StackList &L,char x);
 bool Pop(Stack &L,ElemType &x);
+bool Pop(StackList &L,char &x);
 
 
 bool initStack(StackList &L){
@@ -63,7 +65,7 @@ bool Pop(StackList &L,ElemType &x){
     StackNode *p=L->next,*pre;
     pre=p;
     p=p->next;
-    if(!p) return 0; //Stack Empty
+    if(p==NULL) return 0; //Stack Empty
     x=p->data;
     pre->next=p->next;
     free(p);
@@ -79,7 +81,6 @@ bool Pop(StackList &L,char &x){ //Pop Overload
     pre->next=p->next;
     L->count--;
     free(p);
-    
     return 1;
 }
 

@@ -145,3 +145,9 @@ int infix2suffix(char infix[],char suffix[],int len){
 
 终于会用C宏定义写函数了(逃
 
+碰到的bus error，用mac下的gdb发现断在了Pop函数上。。脱离了peda的gdb调试，学了几个命令
+
+ ```
+display /20i $pc 自动输出ip指向的20行汇编
+ ```
+
